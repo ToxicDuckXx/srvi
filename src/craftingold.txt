@@ -1,0 +1,96 @@
+#include "Crafting.hpp"
+#include "Item.hpp"
+#include <iostream>
+
+Crafting::Crafting()
+{
+
+}
+
+void Crafting::draw(GraphicsManager& window, Inventory& inventory)
+{
+    
+    for (int i=0; i<buttons.size();i++)
+    {
+        buttons[i].draw(window);
+    }
+}
+
+void Crafting::onPress(Inventory& inventory, GraphicsManager& window)
+{
+    int length;
+    buttons.clear();
+    if (inventory.hasItem(Item(101, 10, "WOOD")))
+    {
+                buttons.push_back(Button(Vector2f(10, 10), Vector2f(100, 100), inventory.getItemTexture(2), 102));
+    }
+    if ((inventory.hasItem(Item(101, 10, "WOOD")))&&(inventory.hasItem(Item(103, 25, "ROCK"))))
+    {
+        length = buttons.size()+1;
+        buttons.push_back(Button(Vector2f(10, (length-1)*100+10), Vector2f(100, 100), inventory.getItemTexture(5), 105));
+    }
+    if ((inventory.hasItem(Item(101, 10, "WOOD")))&&(inventory.hasItem(Item(103, 50, "ROCJ"))))
+    {
+        length = buttons.size() + 1;
+        buttons.push_back(Button(Vector2f(10, (length-1)*100+10), Vector2f(100,100), inventory.getItemTexture(6), 106));
+    }
+    if ((inventory.hasItem(Item(101, 10, "WOOD")))&&(inventory.hasItem(Item(107, 30, "GOLD"))))
+    {
+        length = buttons.size() + 1;
+        buttons.push_back(Button(Vector2f(10, (length-1)*100+10), Vector2f(100,100), inventory.getItemTexture(8), 108));
+    }
+    for (int i=0; i<buttons.size();i++)
+    {
+        if (buttons[i].onPress())
+        {
+ 
+            if (buttons[i].id == 102)
+            {
+                if (inventory.removeItem(Item(101, 10, "WOOD"), window))
+                {
+                    inventory.addItem(Item(102, 1, "PICKAXE"), window);
+                    //Fix this to just erase pickace from buttons.
+                    if (!(inventory.hasItem(Item(101, 10, "WOOD"))))
+                    {
+                        buttons.clear();
+                    }
+                }
+            }
+            else if (buttons[i].id == 105)
+            {
+                if ((inventory.removeItem(Item(101, 10, ""), window))&&(inventory.removeItem(Item(103, 25, ""), window)))
+                {
+                    inventory.addItem(Item(105, 1, "STONE_SWORD"), window);
+                    if (!((inventory.hasItem(Item(101, 10, nullptr))||(inventory.hasItem(Item(103, 25, nullptr))))))
+                    {
+                        buttons.clear();
+                    }
+                }
+            }
+            else if (buttons[i].id == 106)
+            {
+                if ((inventory.removeItem(Item(101, 10, ""), window))&&(inventory.removeItem(Item(103, 50, ""), window)))
+                {
+                    inventory.addItem(Item(106, 1, "STONE_PICKAXE"), window);
+                    if (!((inventory.hasItem(Item(101, 10, nullptr))||(inventory.hasItem(Item(103, 50, nullptr))))))
+                    {
+                        buttons.clear();
+                    }
+                }
+            }
+            else if (buttons[i].id == 108)
+            {
+                if ((inventory.removeItem(Item(101, 10, "WOOD"), window))&&(inventory.removeItem(Item(107, 30, "GOLD"), window)))
+                {
+                    inventory.addItem(Item(108, 1, "STAFF"), window);
+                    if (!((inventory.hasItem(Item(101, 10, nullptr))||(inventory.hasItem(Item(107, 30, nullptr))))))
+                    {
+                        buttons.clear();
+                    }
+                }
+            }
+            
+            
+        };
+    }
+}
